@@ -4,12 +4,12 @@ const Sour: Theme = {
 		Inverse: new Color3(1, 1, 1)
 	},
 	Text: {
-		Color: Color3.fromRGB(219, 219, 219),
+		Color: Color3.fromRGB(191, 191, 191),
 		Disabled: Color3.fromRGB(145, 145, 145),
 		Inverted: Color3.fromRGB(247, 247, 247)
 	},
 	Icon: {
-		Color: Color3.fromRGB(222, 219, 219),
+		Color: Color3.fromRGB(199, 199, 199),
 		Active: Color3.fromRGB(237, 237, 237),
 		Disabled: Color3.fromRGB(86, 86, 86)
 	},

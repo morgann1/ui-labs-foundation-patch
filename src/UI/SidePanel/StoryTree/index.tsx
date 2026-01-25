@@ -32,14 +32,14 @@ function StoryTree(props: StoryTreeProps) {
 			});
 			if (unknownSize > 0) {
 				elementsList.push(
-					<Div Size={new UDim2(1, 0, 0, 8)} LayoutOrder={booksSize}>
+					<Div key={"2-Divisor"} Size={new UDim2(1, 0, 0, 8)}>
 						<Divisor Direction="X" Size={new UDim(1, -25)} Transparency={0.9} />
 					</Div>
 				);
 			}
 		}
 		if (filteredNodes.unknown.size() > 0) {
-			elementsList.push(<UnknownNode Order={booksSize + 1} UnknownNodes={filteredNodes.unknown} />);
+			elementsList.push(<UnknownNode UnknownNodes={filteredNodes.unknown} />);
 		}
 		return elementsList;
 	}, [nodes, filter]);
@@ -61,11 +61,7 @@ function StoryTree(props: StoryTreeProps) {
 				Position={UDim2.fromScale(0.5, 0.5)}
 				Size={new UDim2(1, 6, 1, 0)}
 			>
-				<TopList
-					SortOrder={Enum.SortOrder.Name}
-					HorizontalAlignment={Enum.HorizontalAlignment.Center}
-					Padding={new UDim(0, 1)}
-				/>
+				<TopList HorizontalAlignment={Enum.HorizontalAlignment.Center} Padding={new UDim(0, 1)} />
 				{nodeList}
 			</scrollingframe>
 		</Detector>

@@ -22,7 +22,6 @@ import { CreateInstancePath, EncodeInstancePath } from "Utils/InstanceUtils";
 
 interface StoryProps {
 	Node: StoryNode;
-	Order: number;
 	Unknown?: boolean;
 	Visible?: boolean;
 }
@@ -115,7 +114,7 @@ function Story(setprops: StoryProps) {
 	});
 
 	return (
-		<Div key={props.Node.Name} LayoutOrder={props.Order} Size={new UDim2(1, 0, 0, 25)}>
+		<Div key={`2-${props.Node.Name}`} Size={new UDim2(1, 0, 0, 25)}>
 			<Div key={"Display"}>
 				<Padding Left={14} Right={5} />
 				<frame

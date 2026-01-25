@@ -17,17 +17,17 @@ function Storybook(props: StorybookProps) {
 		return props.Node.Children.map((child, index) => {
 			//We could also check the type to be "Folder""
 			if ("Children" in child) {
-				return <Folder Node={child} Order={index} />;
+				return <Folder Node={child} />;
 			} else {
-				return <Story Node={child} Order={index} />;
+				return <Story Node={child} />;
 			}
 		});
 	}, [props.Node.Children]);
 
 	return (
 		<ChildrenHolder
-			Order={props.Order}
 			Name={props.Node.Name}
+			Prefix="1"
 			Sprite={"BookIcon"}
 			IsChild={false}
 			SpriteColor={theme.Normal.Book}

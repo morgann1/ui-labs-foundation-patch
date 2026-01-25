@@ -5,7 +5,6 @@ import ChildrenHolder from ".";
 import Story from "../Story";
 
 interface FolderProps {
-	Order: number;
 	Node: FolderNode;
 }
 
@@ -20,17 +19,17 @@ function Folder(setprops: FolderProps) {
 	const children = useMemo(() => {
 		return props.Node.Children.map((child, index) => {
 			if ("Children" in child) {
-				return <Folder Node={child} Order={index} />;
+				return <Folder Node={child} />;
 			} else {
-				return <Story Node={child} Order={index} />;
+				return <Story Node={child} />;
 			}
 		});
 	}, [props.Node.Children]);
 
 	return (
 		<ChildrenHolder
+			Prefix="1"
 			Name={props.Node.Instance}
-			Order={props.Order}
 			IsChild={true}
 			Sprite={"FolderIcon"}
 			SpriteColor={theme.Normal.FolderIcon}

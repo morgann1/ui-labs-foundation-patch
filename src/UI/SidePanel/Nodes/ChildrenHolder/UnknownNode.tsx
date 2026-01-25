@@ -6,7 +6,6 @@ import UnknownCover from "../UnknownCover";
 import UnknownFolder from "./UnknownFolder";
 
 interface UnknownNodeProps {
-	Order: number;
 	UnknownNodes: UnknownNode[];
 }
 
@@ -21,7 +20,7 @@ function UnknownNode(props: UnknownNodeProps) {
 
 	return (
 		<ChildrenHolder
-			Order={props.Order}
+			Prefix="3"
 			Name={"Unknown Stories"}
 			Sprite={"UnknownIcon"}
 			SpriteColor={theme.Text.Color}

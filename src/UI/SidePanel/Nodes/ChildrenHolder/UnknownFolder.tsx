@@ -20,12 +20,12 @@ function UnknownFolder(setprops: UnknownFolderProps) {
 
 	const children = useMemo(() => {
 		return props.Node.Children.map((child, index) => {
-			return <Story Node={child} Order={index} Visible={true} Unknown={true} />;
+			return <Story Node={child} Visible={true} Unknown={true} />;
 		});
 	}, [props.Node.Children]);
 	return (
 		<ChildrenHolder
-			Order={props.Order}
+			Prefix="1"
 			Name={props.Node.Instance}
 			Sprite={"FolderIcon"}
 			SpriteColor={theme.Normal.FolderIcon}
