@@ -1,6 +1,7 @@
 import Sift from "@rbxts/sift";
-import { t } from "@rbxts/t";
+import { Datatype, Primitive } from "@rbxts/ui-labs";
 import { StoryBase } from "@rbxts/ui-labs/src/Typing/Typing";
+import { AllControlsMap } from "UI/StoryControls/ControlMap";
 import { Cast } from "Utils/MiscUtils";
 
 import { FusionChecker, FusionKeys } from "./Libraries/FusionCheck";
@@ -12,18 +13,81 @@ import { VideChecker, VideKeys } from "./Libraries/VideCheck";
 import { StoryCheck, StoryError } from "./StoryCheck";
 
 //TODO: Add control type
-const CONTROL_TYPE = t.intersection(t.keys(t.string), t.values(t.any));
+
+function CHECK_OBJECT_CONTROL(control: Record<string, unknown>): "valid" | StoryError {
+	if (!("EntryType" in control)) return { Sucess: false, Error: "Malformed control object" };
+
+	if (control.EntryType === "Control") {
+		if (!("Type" in control)) return { Sucess: false, Error: "Malformed control object" };
+		if (!("ControlValue" in control)) return { Sucess: false, Error: "Malformed control object" };
+		if (!((control.Type as string) in AllControlsMap)) {
+			return { Sucess: false, Error: `Unknown control kind "${control.Type}", you might need to update UI Labs"` };
+		}
+	} else if (control.EntryType === "ControlGroup") {
+		if (!("Controls" in control)) return { Sucess: false, Error: "Malformed control group" };
+	} else {
+		return { Sucess: false, Error: "Malformed control object" };
+	}
+
+	return "valid";
+}
+
+function CHECK_CONTROL_TYPE(control: unknown): "valid" | StoryError {
+	if (typeIs(control, "table")) {
+		return CHECK_OBJECT_CONTROL(control as Record<string, unknown>);
+	} else {
+		const controlType = typeOf(control);
+		if (controlType in Primitive) {
+			return "valid";
+		} else if (controlType in Datatype) {
+			return "valid";
+		}
+		return { Sucess: false, Error: `"${controlType}" is not valid control type` };
+	}
+}
+
+function CHECK_CONTROL_LIST(control: unknown): "valid" | StoryError {
+	if (control === undefined) {
+		return "valid";
+	}
+	if (!typeIs(control, "table")) {
+		return { Sucess: false, Error: "table expected, got " + typeOf(control) };
+	}
+
+	for (const [key, value] of pairs(control as Record<string, unknown>)) {
+		const result = CHECK_CONTROL_TYPE(value);
+		if (result !== "valid") {
+			return {
+				Sucess: false,
+				Error: `control "${key}" is not valid: ${result.Error}`
+			};
+		}
+	}
+	return "valid";
+}
+
+function CHECK_OPTIONAL_STRING(val: unknown): "valid" | StoryError {
+	if (val === undefined) return "valid";
+	if (typeIs(val, "string")) return "valid";
+	return { Sucess: false, Error: "string expected, got " + typeOf(val) };
+}
+
+function CHECK_OPTIONAL_FUNCTION(val: unknown): "valid" | StoryError {
+	if (val === undefined) return "valid";
+	if (typeIs(val, "function")) return "valid";
+	return { Sucess: false, Error: "function expected, got " + typeOf(val) };
+}
 
 type StoryTypeCheck<T> = Required<{
-	[K in keyof T]: t.check<T[K]>;
+	[K in keyof T]: (val: unknown) => "valid" | StoryError;
 }>;
 
 const STORY_TYPE: StoryTypeCheck<StoryBase & { use?: string; controls?: {} }> = {
-	use: t.optional(t.string),
-	controls: t.optional(CONTROL_TYPE),
-	name: t.optional(t.string),
-	summary: t.optional(t.string),
-	cleanup: t.optional(t.function)
+	use: CHECK_OPTIONAL_STRING,
+	controls: CHECK_CONTROL_LIST,
+	name: CHECK_OPTIONAL_STRING,
+	summary: CHECK_OPTIONAL_STRING,
+	cleanup: CHECK_OPTIONAL_FUNCTION
 };
 
 type LibraryType = keyof Omit<MountResults, "Functional">;
@@ -75,9 +139,11 @@ export function DefineStoryLibrary(storyReturn: Record<string, unknown>): StoryC
 	// step one: check the base indexes
 	for (const [key, check] of pairs(STORY_TYPE)) {
 		const value = storyReturn[key];
-		if (!check(value)) {
-			return { Sucess: false, Error: `Story key "${key}" is not correct` };
+		const valid = check(value);
+		if (valid === "valid") {
+			continue;
 		}
+		return { Sucess: false, Error: `Story key "${key}" is not correct: ${valid.Error}` };
 	}
 	// step two: check for extra keys
 	const result = CheckExtraKeys(storyReturn, AllKeys, (key) => {

@@ -9,7 +9,7 @@ import { selectSortMode, SortMode } from "Reflex/PluginSettings";
 import { selectPreview } from "Reflex/StoryPreview";
 import ControlGroupRender from "UI/StoryControls/ControlGroupRender";
 import ControlHolder from "UI/StoryControls/ControlHolder";
-import { AllControlMap } from "UI/StoryControls/ControlMap";
+import { AllControlsMap } from "UI/StoryControls/ControlMap";
 import Corner from "UI/Styles/Corner";
 import { Detector } from "UI/Styles/Detector";
 import { Div } from "UI/Styles/Div";
@@ -124,7 +124,7 @@ function RenderControl(
 	value: ControlValue,
 	update: (value: ControlValue) => void
 ) {
-	const FactoryElement = AllControlMap[control.Type] as unknown as ControlFactory<any>;
+	const FactoryElement = AllControlsMap[control.Type] as unknown as ControlFactory<any>;
 
 	const render = (
 		<ControlHolder

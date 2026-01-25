@@ -52,7 +52,7 @@ const AdvancedControlMap: AdvancedControlMap = {
 	Object: _ObjectControl as ControlFactory<AdvancedTypes.Object>
 };
 
-export const AllControlMap: AllControlMap = {
+export const AllControlsMap: AllControlMap = {
 	...PrimitiveControlMap,
 	...DatatypeControlMap,
 	...AdvancedControlMap
