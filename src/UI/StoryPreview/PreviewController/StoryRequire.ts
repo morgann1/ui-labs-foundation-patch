@@ -101,11 +101,6 @@ export function useStoryRequire(entry: PreviewEntry, studioMode: boolean, canRel
 		// the reconciler's dispatcher and the story's hooks on one Shared
 		// singleton and avoiding "attempt to index nil with 'useState'".
 		reloader.HookOnReload((environment) => {
-			// `_G` inside env-loaded modules is `environment.Shared`. React and
-			// Foundation both probe `_G.__DEV__` for dev-mode diagnostics, so
-			// seed it here so the story sees the same flag as the plugin.
-			(environment.Shared as { __DEV__?: boolean }).__DEV__ = true;
-
 			const foundation = node.Module.FindFirstAncestor("Foundation");
 			if (!foundation) return;
 			const wallyWrapper = foundation.Parent;

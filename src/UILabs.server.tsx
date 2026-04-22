@@ -1,5 +1,4 @@
 _G.__ROACT_17_MOCK_SCHEDULER__ = undefined;
-(_G as { __DEV__?: boolean }).__DEV__ = true;
 
 import React from "@rbxts/react";
 import { ReflexProvider } from "@rbxts/react-reflex";
