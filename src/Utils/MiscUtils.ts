@@ -61,3 +61,16 @@ export function CreateTuple<T extends any[]>(...args: T) {
 export function Cast<T>(val: unknown): T {
 	return val as T;
 }
+
+export function IsLuauArray(t: Record<string, unknown>): boolean {
+	let maxIdx = 0;
+	let count = 0;
+	for (const [k] of pairs(t)) {
+		if (!typeIs(k, "number")) return false;
+		const idx = k as number;
+		if (idx !== math.floor(idx) || idx < 1) return false;
+		if (idx > maxIdx) maxIdx = idx;
+		count++;
+	}
+	return count > 0 && count === maxIdx;
+}

@@ -41,7 +41,7 @@ function Branding(props: BrandingProps) {
 				<Text
 					key={"PluginName"}
 					TextColor3={theme.Text.Color}
-					Text="UI Labs"
+					Text="UI Labs (Foundation)"
 					Weight="Bold"
 					TextSize={18}
 					AutomaticSize={Enum.AutomaticSize.X}
@@ -49,7 +49,7 @@ function Branding(props: BrandingProps) {
 				<textbox
 					TextEditable={false}
 					ClearTextOnFocus={false}
-					key={"Version"}
+					key={"VersionCanary"}
 					TextColor3={theme.Text.Disabled}
 					BackgroundTransparency={1}
 					FontFace={Font.fromName("GothamSSm", Enum.FontWeight.Medium)}

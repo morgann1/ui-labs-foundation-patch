@@ -8,7 +8,7 @@ import {
 import { InferControlGroup } from "@rbxts/ui-labs/src/Typing/Typing";
 import { WARNINGS } from "Plugin/Warnings";
 import { AllRecovererMap, ControlRecoverer } from "UI/StoryControls/ControlRecovers";
-import { UILabsWarn } from "Utils/MiscUtils";
+import { IsLuauArray, UILabsWarn } from "Utils/MiscUtils";
 
 import { RecoverControlEntry, RecoverControlsData, RecoverGroupEntry } from "..";
 
@@ -20,6 +20,16 @@ declare global {
 export function TryConvertControl(control: any): ObjectControl | ControlGroup<ConvertedControlList> | undefined {
 	const controlType = typeOf(control);
 	if (controlType === "table") {
+		const asRecord = control as Record<string, unknown>;
+		if (!("EntryType" in asRecord) && IsLuauArray(asRecord)) {
+			const list = control as unknown[];
+			return {
+				EntryType: "Control",
+				Type: "Choose",
+				List: list,
+				ControlValue: list[0]
+			} as unknown as ObjectControl;
+		}
 		return control;
 	}
 

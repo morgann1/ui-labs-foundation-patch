@@ -28,7 +28,7 @@ function StoryTree(props: StoryTreeProps) {
 
 		if (booksSize > 0) {
 			filteredNodes.storybooks.forEach((node, index) => {
-				elementsList.push(<Storybook Order={index} Node={node} />);
+				elementsList.push(<Storybook key={`Storybook-${index}-${node.Module.Name}`} Order={index} Node={node} />);
 			});
 			if (unknownSize > 0) {
 				elementsList.push(
@@ -39,7 +39,7 @@ function StoryTree(props: StoryTreeProps) {
 			}
 		}
 		if (filteredNodes.unknown.size() > 0) {
-			elementsList.push(<UnknownNode UnknownNodes={filteredNodes.unknown} />);
+			elementsList.push(<UnknownNode key={"UnknownNodes"} UnknownNodes={filteredNodes.unknown} />);
 		}
 		return elementsList;
 	}, [nodes, filter]);

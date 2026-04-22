@@ -17,9 +17,9 @@ function Storybook(props: StorybookProps) {
 		return props.Node.Children.map((child, index) => {
 			//We could also check the type to be "Folder""
 			if ("Children" in child) {
-				return <Folder Node={child} />;
+				return <Folder key={`Folder-${child.Instance.Name}-${index}`} Node={child} />;
 			} else {
-				return <Story Node={child} />;
+				return <Story key={`Story-${child.Name}-${index}`} Node={child} />;
 			}
 		});
 	}, [props.Node.Children]);

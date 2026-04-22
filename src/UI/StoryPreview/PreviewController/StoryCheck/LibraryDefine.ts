@@ -2,7 +2,7 @@ import Sift from "@rbxts/sift";
 import { Datatype, Primitive } from "@rbxts/ui-labs";
 import { StoryBase } from "@rbxts/ui-labs/src/Typing/Typing";
 import { AllControlsMap } from "UI/StoryControls/ControlMap";
-import { Cast } from "Utils/MiscUtils";
+import { Cast, IsLuauArray } from "Utils/MiscUtils";
 
 import { FusionChecker, FusionKeys } from "./Libraries/FusionCheck";
 import { GenericChecker, GenericKeys } from "./Libraries/GenericCheck";
@@ -15,7 +15,11 @@ import { StoryCheck, StoryError } from "./StoryCheck";
 //TODO: Add control type
 
 function CHECK_OBJECT_CONTROL(control: Record<string, unknown>): "valid" | StoryError {
-	if (!("EntryType" in control)) return { Sucess: false, Error: "Malformed control object" };
+	if (!("EntryType" in control)) {
+		// Shorthand: a plain Luau array becomes an implicit Choose control
+		if (IsLuauArray(control)) return "valid";
+		return { Sucess: false, Error: "Malformed control object" };
+	}
 
 	if (control.EntryType === "Control") {
 		if (!("Type" in control)) return { Sucess: false, Error: "Malformed control object" };
@@ -78,16 +82,23 @@ function CHECK_OPTIONAL_FUNCTION(val: unknown): "valid" | StoryError {
 	return { Sucess: false, Error: "function expected, got " + typeOf(val) };
 }
 
+function CHECK_OPTIONAL_TABLE(val: unknown): "valid" | StoryError {
+	if (val === undefined) return "valid";
+	if (typeIs(val, "table")) return "valid";
+	return { Sucess: false, Error: "table expected, got " + typeOf(val) };
+}
+
 type StoryTypeCheck<T> = Required<{
 	[K in keyof T]: (val: unknown) => "valid" | StoryError;
 }>;
 
-const STORY_TYPE: StoryTypeCheck<StoryBase & { use?: string; controls?: {} }> = {
+const STORY_TYPE: StoryTypeCheck<StoryBase & { use?: string; controls?: {}; stories?: {} }> = {
 	use: CHECK_OPTIONAL_STRING,
 	controls: CHECK_CONTROL_LIST,
 	name: CHECK_OPTIONAL_STRING,
 	summary: CHECK_OPTIONAL_STRING,
-	cleanup: CHECK_OPTIONAL_FUNCTION
+	cleanup: CHECK_OPTIONAL_FUNCTION,
+	stories: CHECK_OPTIONAL_TABLE
 };
 
 type LibraryType = keyof Omit<MountResults, "Functional">;

@@ -48,6 +48,15 @@ export class Environment {
 		this._Dependencies.set(module, { Result: result });
 	}
 
+	// Preload a module's result into the dependency cache so subsequent `require`
+	// calls from env-loaded code return this exact value without reloading through
+	// loadstring. Use this to hand in natively-required modules (e.g. React,
+	// ReactRoblox) so the story's hook dispatcher and the reconciler end up using
+	// the same Shared singleton.
+	RegisterDependency(module: ModuleScript, result: unknown) {
+		this._RegistryDependency(module, result);
+	}
+
 	IsDependency(module: ModuleScript) {
 		return this._Dependencies.has(module);
 	}

@@ -1,4 +1,5 @@
 _G.__ROACT_17_MOCK_SCHEDULER__ = undefined;
+(_G as { __DEV__?: boolean }).__DEV__ = true;
 
 import React from "@rbxts/react";
 import { ReflexProvider } from "@rbxts/react-reflex";
@@ -13,10 +14,10 @@ if (!RunService.IsRunning() || RunService.IsEdit()) {
 	const isLocal = IsLocalPlugin(plugin);
 	const isCanary = IsCanaryPlugin(plugin);
 
-	const toolbar = plugin.CreateToolbar(isLocal ? "UI Labs (DEV)" : "UI Labs");
+	const toolbar = plugin.CreateToolbar(isLocal ? "UI Labs Foundation (DEV)" : "UI Labs (Foundation)");
 	const pluginButton = toolbar.CreateButton(
-		"UI Labs",
-		"Open UI Labs",
+		"UI Labs (Foundation)",
+		"Open UI Labs (Foundation fork)",
 		isLocal ? "rbxassetid://16652065460" : isCanary ? "rbxassetid://88856573487980" : "rbxassetid://13858107432"
 	);
 	const stopButton = toolbar.CreateButton("Stop", "Stop UI Labs", "rbxassetid://13960086023");
@@ -29,8 +30,8 @@ if (!RunService.IsRunning() || RunService.IsEdit()) {
 		new DockWidgetPluginGuiInfo(Enum.InitialDockState.Float, false, false, 0, 0)
 	);
 
-	dockWidget.Title = "UI Labs - Storybook";
-	dockWidget.Name = isLocal ? "UILabs(DEV)" : "UILabs";
+	dockWidget.Title = "UI Labs (Foundation) - Storybook";
+	dockWidget.Name = isLocal ? "UILabsFoundation(DEV)" : "UILabsFoundation";
 	dockWidget.ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
 	let isOpen = false;
 
